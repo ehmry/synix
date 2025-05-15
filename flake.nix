@@ -20,6 +20,8 @@
           ];
         });
 
+        synit-pid1 = prev.callPackage ./pkgs/synit-pid1 { };
+
         # fork of sysklogd - same author as finit
         # currently experiencing bug with this, need to look into it
         sysklogd = prev.callPackage ./pkgs/sysklogd { };
