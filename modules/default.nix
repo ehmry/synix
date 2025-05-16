@@ -22,6 +22,7 @@ in
       # ./nixpkgs
       ./security
       ./system/activation
+      ./system/service
       ./time
       ./users
       ./xdg

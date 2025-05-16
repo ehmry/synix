@@ -28,6 +28,7 @@ let
 in
 {
   imports = [
+    ../system/service/synit/system.nix
     ./daemons.nix
     ./dependencies.nix
     ./filesystems.nix
