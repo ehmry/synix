@@ -20,6 +20,8 @@
           ];
         });
 
+        nncp = prev.callPackage ./pkgs/nncp { };
+
         synit-pid1 = prev.callPackage ./pkgs/synit-pid1 { };
 
         # fork of sysklogd - same author as finit
