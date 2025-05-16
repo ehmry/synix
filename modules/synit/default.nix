@@ -120,15 +120,21 @@ in
       text = "install --mode=644 --directory /run/etc/syndicate/{core,system,services}";
     };
 
-    system.activationScripts.synit-run = mkIf cfg.controlSocket.enable {
-      deps = [
-        "specialfs"
-        "users"
-      ];
-      text = "install --group=wheel --mode=640 --directory /run/synit";
-    };
+    system.tmpfiles.synit =
+      let
+        configAttrs.d = {
+          mode = "0660";
+          user = "root";
+          group = "wheel";
+        };
+      in
+      {
+        "/run/etc/syndicate/core" = configAttrs;
+        "/run/etc/syndicate/network" = configAttrs;
+        "/run/etc/syndicate/services" = configAttrs;
+        "/run/synit" = mkIf cfg.controlSocket.enable configAttrs;
+      };
 
-    systemd.enable = false;
   };
 
   meta = {
