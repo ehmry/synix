@@ -56,33 +56,6 @@ in
 
     pid1.package = mkPackageOption pkgs "synit-pid1" { };
 
-    pid1.args = mkOption {
-      description = "The PID1 command line.";
-      defaultText = literalMD "Attributes for `synit-pid`, `logger`, `syndicate-server`, and `syndicate-server-config`.";
-      example = {
-        control = {
-          deps = [ "syndicate-server" ];
-          text = [
-            "--control"
-          ];
-        };
-      };
-      type = types.attrsOf (
-        types.submodule {
-          options = {
-            deps = mkOption {
-              type = types.listOf types.str;
-              default = [ ];
-              description = "List of argument groups that must preceded this one.";
-            };
-            text = mkOption {
-              type = types.uniq (types.listOf (types.either types.str types.path));
-              description = "Group of arguments for the pid1 command-line.";
-            };
-          };
-        }
-      );
-    };
   };
 
   config = mkIfSynit {
@@ -104,8 +77,21 @@ in
       pkgs.synit-service
     ];
 
-    synit.pid1.args = {
+    boot.init.pid1Argv = {
+      # This tells Rust programs built with jemallocator to be very aggressive about keeping their
+      # heaps small. Synit currently targets small machines. Without this, I have seen the system
+      # syndicate-server take around 300MB of heap when doing not particularly much; with this, it
+      # takes about 15MB in the same state. There is a performance penalty on being so aggressive
+      # about heap size, but it's more important to stay small in this circumstance right now. - tonyg
+      mallocConf = {
+        text = mkDefault [
+          "export"
+          "_RJEM_MALLOC_CONF"
+          "narenas:1,tcache:false,dirty_decay_ms:0,muzzy_decay_ms:0"
+        ];
+      };
       synit-pid1 = {
+        deps = [ "mallocConf" ];
         text = mkDefault [ (getExe cfg.pid1.package) ];
       };
       logger = {
