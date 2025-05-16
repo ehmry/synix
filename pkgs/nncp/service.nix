@@ -78,7 +78,7 @@ in
       log = mkDefault "/var/spool/nncp-${cfg.name}/log";
     };
 
-    systemd.tmpfiles.settings.nncp =
+    services.tmpfiles.settings.nncp =
       let
         rule.d = {
           mode = "0770";
@@ -92,7 +92,7 @@ in
       };
 
     process = {
-      executable = writeExeclineScript "nncp-config.el" [ ] ''
+      executable = writeExeclineScript "nncp-config.el" "" ''
         umask 127
         foreground { rm -f ${nncpCfgFile} }
         pipeline -r {
