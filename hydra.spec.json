@@ -1,0 +1,27 @@
+{
+  "finix": {
+    "enabled": 1,
+    "hidden": false,
+    "description": "Finix tests",
+    "nixexprinput": "finix",
+    "nixexprpath": "tests/default.nix",
+    "checkinterval": 300,
+    "schedulingshares": 4,
+    "enableemail": false,
+    "enable_dynamic_run_command": false,
+    "emailoverride": "",
+    "keepnr": 3,
+    "inputs": {
+      "finix": {
+        "type": "git",
+        "value": "https://github.com/ehmry/synix.git main",
+        "emailresponsible": false
+      },
+      "nixpkgs": {
+        "type": "git",
+        "value": "https://github.com/NixOS/nixpkgs.git nixos-unstable",
+        "emailresponsible": false
+      }
+    }
+  }
+}
